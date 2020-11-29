@@ -48,12 +48,10 @@ const App = () => {
 
   const vote = (id) => {
     const anecdote = anecdoteById(id)
-
     const voted = {
       ...anecdote,
       votes: anecdote.votes + 1
     }
-
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
@@ -75,7 +73,7 @@ const App = () => {
           <About />
         </Route>
         <Route path="/anecdotes/:id">
-          <Anecdote anecdote={anecdote} />
+          <Anecdote anecdote={anecdote} vote={vote} />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
