@@ -1,37 +1,32 @@
-import axios from 'axios'
-const baseUrl = '/api/blogs'
-
-let token = null
-
-const setToken = newToken => {
-  token = `bearer ${newToken}`
-}
+import axios from "axios";
+const baseUrl = "/api/blogs";
+import localdb from '../utils/localdb'
 
 const getConfig = () => {
-  const defaultConfig = {
-    headers: { Authorization: token }
+    return  {
+      headers: { Authorization: `bearer ${localdb.loadUser().token}` }
   }
-  return { ...defaultConfig }
-}
+};
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
-}
+const getAll = async () => {
+  const response = await axios.get(baseUrl);
+  return response.data;
+};
 
-const create = async newBlog => {
-  const response = await axios.post(baseUrl, newBlog, getConfig())
-  return response.data
-}
+const create = async (newBlog) => {
+  const response = await axios.post(baseUrl, newBlog, getConfig());
+  return response.data;
+};
 
-const update = (id, updatedObject) => {
-  const response = axios.put(`${baseUrl}/${id}`, updatedObject, getConfig())
-  return response.data
-}
+const update = async (updatedObject) => {
+  const response = await axios.put(`${baseUrl}/${updatedObject.id}`, updatedObject, getConfig());
+  return response.data;
+};
 
-const deleting = async (id) => {
-  const deletedBlog = await axios.delete(`${baseUrl}/${id}`, getConfig())
-  return deletedBlog.data
-}
+const remove = async (id) => {
+  console.log("<----STEP 3---->", id);
+  const response = await axios.delete(`${baseUrl}/${id}`, getConfig());
+  return response.data;
+};
 
-export default { getAll, create, update, deleting, setToken }
+export default { getAll, create, update, remove };
