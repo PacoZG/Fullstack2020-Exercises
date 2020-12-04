@@ -49,11 +49,11 @@
 }
 
 .blogStyle {
-  padding-top: 10px;
-  padding-left: 2px;
+  padding-Top: 10px;
+  padding-Left: 2px;
   border-style: solid;
-  border-width: 1px;
-  margin-bottom: 5px;
+  border-Width: 1px;
+  margin-Bottom: 5px;
 }
 
 .blogRemoved {
@@ -85,9 +85,7 @@
   justify-content: flex-end;
 }
 
-.button:hover {
-  background-color: #3e8e41;
-}
+.button:hover {background-color: #3e8e41}
 
 .button:active {
   background-color: #3e8e41;
@@ -115,7 +113,7 @@
 }
 
 .blogButton:hover {
-  background-color: #00000000;
+  background-color: #00000000
 }
 
 .blogButton:active {
@@ -142,9 +140,7 @@
   margin-top: 1px;
 }
 
-.logoutButton:hover {
-  background-color: #3e8e41;
-}
+.logoutButton:hover {background-color: #3e8e41}
 
 .logoutButton:active {
   background-color: #3e8e41;
@@ -168,11 +164,11 @@
   margin-bottom: 3px;
   margin-top: 3px;
   position: relative;
-  left: 40px;
+  left: 40px
 }
 
 .deleteButton:hover {
-  background-color: #491c1cb2;
+  background-color: #491c1cb2
 }
 
 .deleteButton:active {
@@ -186,7 +182,7 @@
   background-color: rgb(247, 223, 193);
   padding: 10px 20px;
   font-weight: bolder;
-  color: black;
+  color:black;
   font-size: 25px;
   border-style: groove;
   border-radius: 10px;
@@ -194,20 +190,20 @@
   margin-top: 1px;
   width: 100%;
 }
-.nameStyle {
+.nameStyle{
   background-color: cornflowerblue;
   padding: 10px 20px;
-  color: #102e20;
+  color:#102e20;
   font-size: 20px;
   margin-bottom: 1px;
   margin-top: 1px;
 }
 
-.headerStyle {
+.headerStyle{
   height: auto;
   background-color: lightgray;
   padding: 1px 10px;
-  color: black;
+  color:black;
   font-style: normal;
   font: normal small-caps normal 16px/1.4 Georgia;
   font-size: 20px;
@@ -220,14 +216,14 @@
   height: 60px;
   background-color: lightgray;
   padding: 0px 20px;
-  color: black;
+  color:black;
   font-style: normal;
   font-size: 40px;
   border-radius: 10px;
   margin-top: 1px;
   margin-bottom: 1px;
 }
-.background {
+.background{
   background-color: lightgray;
   border-radius: 10px;
 }
@@ -239,6 +235,7 @@ td {
 table {
   border-collapse: separate;
 }
+
 
 /*  width: 150px;
   text-align: center;

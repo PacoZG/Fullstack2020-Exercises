@@ -1,58 +1,45 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useField } from "../hooks/index";
-import { userLogin } from "../reducers/userReducer";
-import { setNotification } from "../reducers/notificationReducer";
-import loginService from "../services/login";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const LoginForm = () => {
-  const dispatch = useDispatch();
-  const username = useField("usarname");
-  const password = useField("password");
-
-  const credentials = {
-    username: username.param.value,
-    password: password.param.value,
-  };
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    //console.log('CREDENTIALS: ', credentials)
-    try {
-      var user = await loginService.login(credentials);
-      dispatch(userLogin(user));
-      dispatch(
-        setNotification(`logged in, welcome back ${user.name}`, "success")
-      );
-    } catch (exception) {
-      //console.log(exception)
-      dispatch(setNotification("wrong username or password", "error"));
-    }
-  };
-
+const LoginForm = (props) => {
+  const { handleSubmit, username, password, handleUsernameChange, handlePasswordChange } = props
   return (
-    <form className={"normal"} onSubmit={handleLogin}>
+    <form className={'normal'} onSubmit={handleSubmit}>
       <table>
         <tbody>
-          <tr>
-            <td>{"username"}</td>
-            <td>
-              <input id="username" name="Username" {...username.param} />
-            </td>
+          <tr >
+            <td>{'username'}</td>
+            <td><input
+              id='username'
+              type="text"
+              value={username}
+              name="Username"
+              onChange={handleUsernameChange}
+            /></td>
           </tr>
-          <tr>
-            <td>{"password"}</td>
-            <td>
-              <input id="password" name="Password" {...password.param} />
-            </td>
+          <tr >
+            <td>{'password'}</td>
+            <td><input
+              id='password'
+              type="password"
+              value={password}
+              name="Password"
+              onChange={handlePasswordChange}
+            /></td>
           </tr>
         </tbody>
       </table>
-      <button id="login-button" className={"button"} type="submit">
-        {"login"}
-      </button>
+      <button id="login-button" className={'button'} type="submit">{'login'}</button>
     </form>
-  );
-};
+  )
+}
 
-export default LoginForm;
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired
+}
+
+export default LoginForm
