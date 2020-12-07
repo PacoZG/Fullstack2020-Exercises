@@ -1,8 +1,8 @@
+import Axios from "axios";
 import blogService from "../services/blogs";
 import localdb from '../utils/localdb';
 
 const blogReducer = (state = [], action) => {
-  console.log("<----STEP 5---->");
   console.log("BLOGS STATE IN BLOGREDUCER:", state);
   console.log("BLOGS ACTION.TYPE IN BLOGREDUCER:", action);
   switch (action.type) {
@@ -18,6 +18,12 @@ const blogReducer = (state = [], action) => {
     }
     case "DELETE":
       return state.filter(blog => blog.id !== action.data);
+    case 'COMMENT':
+      console.log('ACTION DATA inside COMMET:', action.data)
+      const id= action.data.id
+      const blogToComment = state.find ( blog => blog.id === id)
+      const changedBlog = {...blogToComment, comments: action.data.comments}
+      return state.map((blog) => (blog.id !== id ? blog : changedBlog));
     default:
       return state;
   }
@@ -36,8 +42,7 @@ export const initializeBlogs = () => {
 export const createBlog = (blog) => {
   return async (dispatch) => {
     const newBlog = await blogService.create(blog);
-    const newBlogwUser = {...newBlog, user: localdb.loadUser()}
-    console.log('BLOG CREATED W/user:', newBlogwUser)
+    const newBlogwUser = { ...newBlog, user: localdb.loadUser() }
     dispatch({
       type: "NEW_BLOG",
       data: newBlogwUser,
@@ -49,7 +54,6 @@ export const likeBlog = (blog) => {
   const updatedBlog = { ...blog, likes: blog.likes + 1 };
   return async (dispatch) => {
     const changedBlog = await blogService.update(updatedBlog);
-
     dispatch({
       type: "LIKE",
       data: changedBlog,
@@ -58,8 +62,6 @@ export const likeBlog = (blog) => {
 };
 
 export const deleteBlog = (blog) => {
-  console.log("<----STEP 2---->");
-  console.log("ID OF BLOG TO DELETE:", blog.id);
   return async (dispatch) => {
     await blogService.remove(blog.id);
     dispatch({
@@ -68,5 +70,15 @@ export const deleteBlog = (blog) => {
     });
   };
 };
+
+export const commentBlog = (commentedBlog) => {
+  return async dispatch => {
+    const updatedBlog = await blogService.addComment(commentedBlog)
+    dispatch({
+      type: 'COMMENT',
+      data: updatedBlog
+    })
+  }
+}
 
 export default blogReducer;

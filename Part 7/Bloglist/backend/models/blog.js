@@ -21,7 +21,12 @@ let blogSchema = mongoose.Schema({
   },
   likes: {
     type: Number
-  }
+  },
+  comments: [
+    {
+      type: String,
+    }
+  ]
 })
 
 blogSchema.set('toJSON', {

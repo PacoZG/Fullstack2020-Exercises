@@ -64,7 +64,25 @@ blogsRouter.put('/:id', (request, response) => {
     title: body.title,
     author: body.author,
     userId: body.userId,
-    likes: body.likes
+    likes: body.likes,
+    comments: body.comments
+  }
+  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    .then(updatedBlog => updatedBlog.toJSON())
+    .then(savedAndUpdatedBlog => {
+      response.status(201).json(savedAndUpdatedBlog)
+    })
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const body = request.body
+  const blog = {
+    url: body.url,
+    title: body.title,
+    author: body.author,
+    userId: body.userId,
+    likes: body.likes,
+    comments: body.comments
   }
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     .then(updatedBlog => updatedBlog.toJSON())

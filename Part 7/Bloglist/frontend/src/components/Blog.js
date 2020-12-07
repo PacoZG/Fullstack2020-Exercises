@@ -1,31 +1,28 @@
-import React, { useState, useImperativeHandle } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { likeBlog, deleteBlog, commentBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { useParams } from "react-router-dom"
+import { Button } from 'react-bootstrap'
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
-const Blog = React.forwardRef(({ blog }, ref) => {
+const Blog = () => {
+  const id = useParams().id
+  const blog = useSelector(state => state.blogs.find(b => b.id === id))
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.user)
-  //const blogs = useSelector(state => state.blogs)
-
-  const [visible, setVisible] = useState(false)
-  const showDetails = { display: visible ? 'none' : '' }
-  const hideDetails = { display: visible ? '' : 'none' }
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  useImperativeHandle(ref, () => {
-    return {
-      toggleVisibility,
-    }
-  })
+  const [visible, setVisible] = useState(true)
+  const showTextarea = { display: visible ? 'none' : '' }
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      console.log('<----STEP 1---->')
       dispatch(deleteBlog(blog))
       dispatch(setNotification('Blog has been deleted!', 'success'))
     }
@@ -33,63 +30,110 @@ const Blog = React.forwardRef(({ blog }, ref) => {
 
   const handleLike = () => {
     dispatch(likeBlog(blog))
-    dispatch(setNotification(`You liked ${blog.title}`, 'success'))
+    dispatch(setNotification(`You liked "${blog.title}"`, 'success'))
   }
 
+  const submitComment = () => {
+    var text = document.getElementById("textarea").value;
+    if (text !== "") {
+      const commentedBlog = { ...blog, comments: blog.comments.concat(text) }
+      setVisible(!visible)
+      dispatch(commentBlog(commentedBlog))
+    }
+  }
   return (
     <div>
-      <table className={'blog'}>
-        <tbody style={showDetails}>
-          <tr>
-            <td>
-              {blog.title}{', by '} {blog.author}
-            </td>
-            <td>
-              <button
-                id="view-button"
-                className={'blogButton'}
-                onClick={toggleVisibility}
-              > {'view'} </button>
-            </td>
-          </tr>
-        </tbody>
-        <tbody style={hideDetails} className={'detailsVisible'}>
-          <tr>
-            <td>{blog.title}</td>
-            <td>
-              <button id="hide-button" className={'blogButton'} onClick={toggleVisibility}>
-                {'hide'} </button>
-            </td>
-          </tr>
-          <tr>
-            <td>{blog.url}</td>
-          </tr>
-          <tr>
-            <td>
-              {'likes: '}{blog.likes}
-            </td>
-            <td>
-              <button id="like-button" className={'blogButton'} onClick={handleLike}>
-                {'like'} </button>
-            </td>
-          </tr>
-          <tr>
-            <td>{blog.author}</td>
-            {blog&&blog.user.id === user.id ?
-              <td>
-                <button id="delete-button" className={'deleteButton'} onClick={handleDelete}>
-                  {'delete'} </button>
-              </td>
-              : null}
-          </tr>
-        </tbody>
-      </table>
+      {blog ?
+        <TableContainer component={Paper}>
+          <Table >
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" colSpan="2">
+                  <b>{blog.title}{', by '} {blog.author}</b>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan="2">
+                  {'URL: '}<a href={`${blog.url}`}>{`${blog.url}`}</a>{', for more info'}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{blog.likes}{' likes'}</TableCell>
+                <TableCell>
+                  <Button id="like-button" variant="primary" onClick={handleLike}>
+                    {'like'} </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+            <TableRow>
+              <TableCell><b>{`Added by ${blog.author}`}</b></TableCell>
+              {blog && blog.user.id === user.id ?
+                <TableCell>
+                  <Button id="delete-button" variant="primary" onClick={handleDelete}>
+                    {'delete'} </Button>
+                </TableCell>
+                : null}
+            </TableRow>
+          </Table>
+        </TableContainer>
+        : null}
+      <div>
+        {blog ?
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><b>{'Comments'}</b></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {blog.comments.map((comment, i) =>
+                  <TableRow key={i}>
+                    <TableCell><li>{comment}</li> </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          : null}
+      </div>
+      <textarea style={showTextarea} id={'textarea'} className={'textarea'} placeholder="Make a comment" ></textarea>
+      {visible ?
+        <div>
+          <TableContainer component={Paper}>
+            <Table >
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Button variant="primary" onClick={() => setVisible(!visible)}>{'Comment'}</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        :
+        <div>
+          <TableContainer component={Paper}>
+            <Table >
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Button variant="primary" type="submit" onClick={() => { submitComment() }}>{'Submit'}</Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="primary" type="submit" onClick={() => setVisible(!visible)}>{'Cancel'}</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      }
     </div>
   )
-})
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
 }
 
 export default Blog

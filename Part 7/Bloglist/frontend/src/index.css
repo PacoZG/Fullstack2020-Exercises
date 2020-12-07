@@ -32,7 +32,8 @@
   padding: 10px;
   margin-bottom: 1px;
   margin-top: 1px;
-  margin-left: 1px;
+  width: auto;
+  height: auto;
 }
 
 .normal {
@@ -49,6 +50,7 @@
 }
 
 .blogStyle {
+  width:100%;
   padding-Top: 10px;
   padding-Left: 2px;
   border-style: solid;
@@ -224,6 +226,7 @@
   margin-bottom: 1px;
 }
 .background{
+  width:100%;
   background-color: lightgray;
   border-radius: 10px;
 }
@@ -236,8 +239,12 @@ table {
   border-collapse: separate;
 }
 
-
-/*  width: 150px;
-  text-align: center;
-  border: 1px solid black;
-  border-spacing: 0 15px;*/
+.textarea {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}

@@ -1,8 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useField } from "../hooks/index";
+import React, { useState } from "react";
+import PropTypes from "prop-types"
+import { useField } from "../hooks/index"
+import { Table, Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog }) => {
+  const [visible, setVisible] = useState(false)
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
   const title = useField("title");
   const author = useField("author");
   const url = useField("url");
@@ -20,43 +24,45 @@ const BlogForm = ({ createBlog }) => {
   };
 
   return (
-    <div className="formDiv">
-      <form onSubmit={addBlog}>
-        <h2 className={"createStyle"}>{"create new ..."} </h2>
-        <table>
-          <tbody>
+    <div className="container">
+      <Form onSubmit={addBlog}>
+        <Table striped  >
+          <tbody style={hideWhenVisible}>
+            <tr >
+              <td><Button id="newblog-button" variant="primary" onClick={() => setVisible(!visible)}>{'new blog'}</Button></td>
+            </tr>
+          </tbody>
+          <tbody style={showWhenVisible}>
             <tr>
-              <td>{"title:"}</td>
+              <td><Form.Label>{"title:"}</Form.Label></td>
               <td>
-                <input id="title" name="Title" {...title.param} />
+                <Form.Control id="title" name="Title" {...title.param} />
               </td>
             </tr>
             <tr>
-              <td>{"author:"}</td>
+              <td><Form.Label>{"author:"}</Form.Label></td>
               <td>
-                <input id="author" name="Author" {...author.param} />
+                <Form.Control id="author" name="Author" {...author.param} />
               </td>
               <th>
-                <button id="create-button" className={"button"} type="submit">
-                  {"create"}
-                </button>
               </th>
             </tr>
             <tr>
-              <td>{"url:"}</td>
+              <td><Form.Label>{"url:"}</Form.Label></td>
               <td>
-                <input
-                  id="url"
-                  name="url"
-                  placeholder="http://example.com"
-                  pattern="http://.*"
+                <Form.Control id="url" name="url" placeholder="http://example.com" pattern="https://.*"
                   {...url.param}
                 />
               </td>
             </tr>
+            <tr>
+              <td><Button id="create-button" variant="primary" type="submit">{"create"}</Button></td>
+              <td><Button id="cancel-button" variant="primary" onClick={() => setVisible(!visible)}>{'cancel'}</Button></td>
+            </tr>
           </tbody>
-        </table>
-      </form>
+        </Table>
+      </Form>
+
     </div>
   );
 };

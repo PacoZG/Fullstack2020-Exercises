@@ -24,9 +24,13 @@ const update = async (updatedObject) => {
 };
 
 const remove = async (id) => {
-  console.log("<----STEP 3---->", id);
   const response = await axios.delete(`${baseUrl}/${id}`, getConfig());
   return response.data;
 };
 
-export default { getAll, create, update, remove };
+const addComment = async (commentedBlog) => {
+  const request = await axios.post(`${baseUrl}/${commentedBlog.id}/comments`, commentedBlog )
+  return request.data;
+}
+
+export default { getAll, create, update, remove, addComment };

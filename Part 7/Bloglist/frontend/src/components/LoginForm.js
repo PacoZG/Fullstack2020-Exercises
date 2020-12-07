@@ -1,54 +1,48 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useField } from "../hooks/index";
-import { userLogin } from "../reducers/userReducer";
-import { setNotification } from "../reducers/notificationReducer";
+import { Table, Form, Button } from 'react-bootstrap'
+import { useDispatch } from "react-redux"
+import { useField } from "../hooks/index"
+import { userLogin } from "../reducers/userReducer"
+//components
+import { setNotification } from "../reducers/notificationReducer"
 // services
-import loginService from "../services/login";
+import loginService from "../services/login"
 
 const LoginForm = () => {
-  const dispatch = useDispatch();
-  const username = useField("usarname");
-  const password = useField("password");
+  const dispatch = useDispatch()
+  const username = useField("usarname")
+  const password = useField("password")
 
   const credentials = {
     username: username.param.value,
     password: password.param.value,
-  };
+  }
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
       var user = await loginService.login(credentials);
       dispatch(userLogin(user));
-      dispatch(setNotification(`logged in, welcome back ${user.name}`, "success"));
+      dispatch(setNotification(`logged in, welcome back ${user.name}`, "success"))
     } catch (exception) {
-      dispatch(setNotification("wrong username or password", "error"));
+      dispatch(setNotification("wrong username or password", "error"))
     }
-  };
+  }
 
   return (
-    <form className={"normal"} onSubmit={handleLogin}>
-      <table>
-        <tbody>
-          <tr>
-            <td>{"username"}</td>
-            <td>
-              <input id="username" name="Username" {...username.param} />
-            </td>
-          </tr>
-          <tr>
-            <td>{"password"}</td>
-            <td>
-              <input id="password" name="Password" {...password.param} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button id="login-button" className={"button"} type="submit">
-        {"login"}
-      </button>
-    </form>
+    <div>
+      <Form /*className={"normal"}*/ onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>{"username:"}</Form.Label>
+          <Form.Control id="username" name="Username" {...username.param} />
+          <Form.Label>{"password:"}</Form.Label>
+          <Form.Control id="password" name="Password" type="password" {...password.param} />
+        </Form.Group>
+        <Button variant="primary" id="login-button" type="submit">
+          {"login"}
+        </Button>
+      </Form>
+    </div>
   );
 };
 
