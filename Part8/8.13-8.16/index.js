@@ -1,5 +1,6 @@
 const { ApolloServer, UserInputError, gql, AuthenticationError } = require('apollo-server')
 require('dotenv').config()
+const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 // models
@@ -56,7 +57,7 @@ const typeDefs = gql`
   type Mutation {
     addBook(title: String, author: String, published: Int, genres: [String]): Book
     editAuthor(name: String!, setBornTo: Int!): Author
-    createUser(username: String!, favoriteGenre: String!): User
+    createUser(username: String!, password: String! favoriteGenre: String!): User
     login(username: String!, password: String!): Token
   }
 
@@ -82,7 +83,7 @@ const resolvers = {
         return booksByAuthor
       }
       if (!args.author && args.genre) {
-        const booksByGenre = await Book.find({ genres: { $in: [args.genre] } }).populate('author')
+        const booksByGenre = await Book.find({ genres: { $in: [args.genre.toLowerCase()] } }).populate('author')
         return booksByGenre
       }
       const author = await Author.findOne({ name: args.author })
@@ -173,6 +174,7 @@ const resolvers = {
     createUser: async (root, args) => {
       const user = new User({
         username: args.username,
+        password: bcrypt.hash(args.password, 10),
         favoriteGenre: args.favoriteGenre
       })
       try {
@@ -187,7 +189,7 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
 
-      if (!user || args.password !== JWT_SECRET) {
+      if (!user || !bcrypt.compare(user.password, args.password)) {
         throw new UserInputError('Wrong credentials')
       }
       const userForToken = {
