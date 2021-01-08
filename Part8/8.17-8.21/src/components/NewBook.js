@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 
 const NewBook = (props) => {
+  const { setNotification } = props
   const [title, setTitle] = useState('')
   const [published, setPublished] = useState('')
   const [author, setAuthor] = useState('')
@@ -18,7 +19,7 @@ const NewBook = (props) => {
     createBook({ variables: { title, published, author, genres } })
     console.log('adding book... { title: ', title, ', published: ', published,
       ', author: ', author, ', genres: ', genres)
-
+    setNotification(`${title} added`, 5)
     setTitle('')
     setPublished(null)
     setAuthor('')

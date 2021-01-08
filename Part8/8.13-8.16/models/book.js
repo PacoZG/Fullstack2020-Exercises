@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require("mongoose-unique-validator")
 
 const schema = new mongoose.Schema({
   title: {
@@ -16,6 +17,10 @@ const schema = new mongoose.Schema({
     ref: 'Author'
   },
   genres: [{ type: String}]
+})
+
+schema.plugin(uniqueValidator, {
+  message: "A book with that name is already in the db",
 })
 
 module.exports = mongoose.model('Book', schema)

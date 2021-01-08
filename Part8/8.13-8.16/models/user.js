@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require("mongoose-unique-validator")
 
 const schema = new mongoose.Schema({
   username: {
@@ -14,4 +15,8 @@ const schema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('User', schema)
+schema.plugin(uniqueValidator, {
+  message: "A user with that name is already in the db",
+})
+
+module.exports = mongoose.model("User", schema)

@@ -88,11 +88,11 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author })
       const booksByAuthor = await Book.find({ author: { $in: [author.id] } }).populate('author')
       const booksByGenre = await Book.find({ genres: { $in: [args.genre] } }).populate('author')
-      return booksByAuthor.concat(booksByGenre)
+      return booksByAuthor || booksByGenre
     },
     allUsers: async () => {
       const users = await User.find({})
-      console.log('USERS: ', users)
+      //console.log('USERS: ', users)
       return users
     },
     me: (root, args, context) => {

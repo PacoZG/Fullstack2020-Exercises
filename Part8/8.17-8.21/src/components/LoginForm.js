@@ -3,25 +3,29 @@ import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
 
 const LoginForm = (props) => {
-  const { setToken, setPage } = props
+  const { setToken, setPage, setNotification, users } = props
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  //console.log('USERS', users)
+
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
+      setNotification(error.graphQLErrors[0].message, 5)
+      setPage('login')
     }
   })
-
   useEffect(() => {
     if (result.data) {
+      console.log(result.data.logind)
       const token = result.data.login.value
-      console.log(result)
+      const currentUser = users.find(user => user.username === username)
       setToken(token)
-      const currentUser = { username: username, token: token }
+      localStorage.setItem('library-user-token', token)
+      localStorage.setItem('current-library-user', JSON.stringify(currentUser))
+      setNotification(`${currentUser.username} logged in`, 5)
       setUsername('')
       setPassword('')
-      localStorage.setItem('library-user', JSON.stringify(currentUser))
     }
   }, [result.data]) // eslint-disable-line
 
