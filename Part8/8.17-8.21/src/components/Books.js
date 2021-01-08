@@ -5,18 +5,13 @@ import { ALL_BOOKS } from '../queries'
 const Books = (props) => {
   const [books, setBooks] = useState([])// eslint-disable-next-line
   const [ getBooks, result ] = useLazyQuery(ALL_BOOKS)
-  const [ genre, setGenre ] = useState(null)
 
   const updatedBooks = useQuery(ALL_BOOKS)
   console.log('UPDATED_BOOKS: ', updatedBooks.data.allBooks)
   
-  //console.log('LOADED_BOOKS', books)
-  const showBooks = (genero) => {
-    setGenre(genero)
+  const showBooks = (genre) => {
     getBooks({ variables: { genre: genre } })
   }
-
-  console.log('BOOKS', books)
 
   useEffect (() => {
     if (result.data){

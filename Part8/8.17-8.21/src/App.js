@@ -47,7 +47,7 @@ const App = () => {
   }
 
   //console.log(authors.data)
-  console.log('BOOKS: ',books.data)
+  //console.log('BOOKS: ',books.data)
   //console.log(users.data.allUsers)
 
   return (

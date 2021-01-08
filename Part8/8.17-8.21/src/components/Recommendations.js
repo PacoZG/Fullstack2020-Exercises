@@ -12,7 +12,6 @@ const Recommendations = (props) => {
     setGenre(loggedinUser.favoriteGenre)
     getBooks({ variables: { genre: genre } })
     if (result.data){
-      //console.log(result.data)
       setBooks(result.data.allBooks)
     }// eslint-disable-next-line
   }, [result.data] )
