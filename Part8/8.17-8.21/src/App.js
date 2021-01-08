@@ -62,10 +62,9 @@ const App = () => {
           <button onClick={logout}>{'logout'}</button>
           <div>
             <Authors show={page === 'authors'} authors={authors.data.allAuthors} />
-            <Books show={page === 'books'} loadedBooks={books.data.allBooks} />
+            <Books show={page === 'books'} />
             <NewBook show={page === 'add'} setNotification={setNotification} />
-            <Recommendations show={page === 'recommended'}
-              books={books.data.allBooks} users={users.data.allUsers} />
+            <Recommendations show={page === 'recommended'} users={users.data.allUsers} />
           </div>
         </div> :
         <div>
@@ -74,7 +73,7 @@ const App = () => {
           <button onClick={() => setPage('login')}>{'login'}</button>
           <div>
             <Authors show={page === 'authors'} authors={authors.data.allAuthors} />
-            <Books show={page === 'books'} books={books.data.allBooks} />
+            <Books show={page === 'books'} />
             <LoginForm show={page === 'login'} users={users.data.allUsers}
             setNotification={setNotification} setToken={setToken} setPage={setPage} />
           </div>
