@@ -1,14 +1,22 @@
 import React,  { useState, useEffect } from 'react'
-import { useLazyQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const [books, setBooks] = useState([])// eslint-disable-next-line
   const [ getBooks, result ] = useLazyQuery(ALL_BOOKS)
+  const [ genre, setGenre ] = useState(null)
+
+  const updatedBooks = useQuery(ALL_BOOKS)
+  console.log('UPDATED_BOOKS: ', updatedBooks.data.allBooks)
+  
   //console.log('LOADED_BOOKS', books)
-  const showBooks = (genre) => {
+  const showBooks = (genero) => {
+    setGenre(genero)
     getBooks({ variables: { genre: genre } })
   }
+
+  console.log('BOOKS', books)
 
   useEffect (() => {
     if (result.data){

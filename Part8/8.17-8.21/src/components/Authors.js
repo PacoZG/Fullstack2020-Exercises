@@ -49,9 +49,7 @@ const Authors = (props) => {
       </table>
       <h2>{'Set birthyear'}</h2>
       <Select defaultValue={selectedAuthor} onChange={setSelectedAuthor} options={options} />
-      <p><input
-        value={year}
-        onChange={({ target }) => setYear(target.value)}
+      <p><input value={year} onChange={({ target }) => setYear(target.value)}
       /></p>
       <p><button type='submit' onClick={updateAuthorBirth} >{'Update author'}</button></p>
     </div>
