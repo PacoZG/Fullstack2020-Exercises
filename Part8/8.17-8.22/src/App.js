@@ -4,7 +4,6 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import Recommendations from './components/Recommendations'
 import Notification from './components/Notification'
 
 import { useQuery, useApolloClient } from '@apollo/client'
@@ -21,7 +20,7 @@ const App = () => {
     if (token) {
       setToken(token)
     }
-  }, [])
+  }, [token])
 
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
@@ -47,7 +46,7 @@ const App = () => {
   }
 
   //console.log(authors.data)
-  //console.log('BOOKS: ',books.data)
+  //console.log('BOOKS: ',books.data.allBooks)
   //console.log(users.data.allUsers)
 
   return (
@@ -58,13 +57,11 @@ const App = () => {
           <button onClick={() => setPage('authors')}>{'authors'}</button>
           <button onClick={() => setPage('books')}>{'books'}</button>
           <button onClick={() => setPage('add')}>{'add book'}</button>
-          <button onClick={() => setPage('recommended')}>{'recommended'}</button>
           <button onClick={logout}>{'logout'}</button>
           <div>
             <Authors show={page === 'authors'} authors={authors.data.allAuthors} />
             <Books show={page === 'books'} />
             <NewBook show={page === 'add'} setNotification={setNotification} />
-            <Recommendations show={page === 'recommended'} users={users.data.allUsers} />
           </div>
         </div> :
         <div>

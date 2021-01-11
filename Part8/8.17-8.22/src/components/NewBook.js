@@ -14,17 +14,7 @@ const NewBook = (props) => {
     onError: (error) => {
       setNotification(error.graphQLErrors[0].message, 5)
     },
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
-    update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_BOOKS })
-      store.writeQuery({
-        query: ALL_BOOKS,
-        data: {
-          ...dataInStore,
-          allBooks: [ ...dataInStore.allBooks, response.data.addBook ]
-        }
-      })
-    }
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }]
   })
 
   const submit = async (event) => {
