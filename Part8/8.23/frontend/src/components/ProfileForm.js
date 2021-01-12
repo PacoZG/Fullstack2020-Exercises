@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ALL_USERS, EDIT_USER, ALL_BOOKS } from '../queries'
+import { ALL_USERS, EDIT_USER } from '../queries'
 
 const ProfileForm = (props) => {
   const loggedinUser = JSON.parse(localStorage.getItem('current-library-user'))

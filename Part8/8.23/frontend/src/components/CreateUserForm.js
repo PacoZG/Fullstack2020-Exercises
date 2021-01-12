@@ -18,7 +18,7 @@ const CreateUserForm = (props) => {
   const submit = async (event) => {
     event.preventDefault()
     createUser({ variables: { username, password, favoriteGenre } })
-    console.log('creating user:  { username : ', username, ', password: ', password,', favoriteGenre: ', favoriteGenre)
+    //console.log('creating user:  { username : ', username, ', password: ', password,', favoriteGenre: ', favoriteGenre)
     setNotification(`${username} added`, 5)
     setUsername('')
     setPassword('')

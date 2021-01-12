@@ -15,7 +15,7 @@ const LoginForm = (props) => {
   })
   useEffect(() => {
     if (result.data) {
-      console.log(result.data.logind)
+      console.log(result.data.login.value)
       const token = result.data.login.value
       const currentUser = users.find(user => user.username === username)
       setToken(token)
