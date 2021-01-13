@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 import Select from "react-select";
 
 const Authors = (props) => {
-  const { authors } = props
+  const { setNotification } = props
+  const allAuthors = useQuery(ALL_AUTHORS)
   const [year, setYear] = useState('')
   const [selectedAuthor, setSelectedAuthor] = useState(null)
 
-  let options = []
-  for (var i in authors) {
-    options = [...options, { value: authors[i].name, label: authors[i].name }]
-  }
-
   const [changeBirthday] = useMutation(EDIT_AUTHOR, {
+    onError: (error) => {
+      setNotification(error.graphQLErrors[0].message, 5)
+    },
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
 
@@ -26,6 +25,16 @@ const Authors = (props) => {
   }
   if (!props.show) {
     return null
+  }
+
+  if (allAuthors.loading) {
+    return <div>{'loading...'}</div>
+  }
+
+  const authors = allAuthors.data.allAuthors
+  let options = []
+  for (var i in authors) {
+    options = [...options, { value: authors[i].name, label: authors[i].name }]
   }
 
   return (

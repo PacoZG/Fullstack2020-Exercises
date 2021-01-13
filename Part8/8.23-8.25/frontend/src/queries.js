@@ -9,6 +9,27 @@ const AUTHOR_DETAILS = gql`
   }
 `
 
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    published
+    author {
+      name
+      born
+    }
+    genres
+    id
+  }
+`
+
+const USER_DETAILS = gql `
+  fragment UserDetails on User {
+    username
+    favoriteGenre
+    id
+  }
+`
+
 export const ALL_AUTHORS = gql`
   query {
     allAuthors {
@@ -27,19 +48,6 @@ export const EDIT_AUTHOR = gql`
   ${AUTHOR_DETAILS}
 `
 
-const BOOK_DETAILS = gql`
-  fragment BookDetails on Book {
-    title
-      published
-      author {
-        name
-        born
-      }
-      genres
-      id
-  }
-`
-
 export const ALL_BOOKS = gql`
   query findBooks($author: String, $genre: String) {
     allBooks(author: $author, genre: $genre) {
@@ -49,13 +57,12 @@ export const ALL_BOOKS = gql`
   ${BOOK_DETAILS}
 `
 export const ALL_USERS = gql`
-query {
-  allUsers {
-    username
-    favoriteGenre
-    id
+  query {
+    allUsers {
+      ...UserDetails
+    }
   }
-}
+  ${USER_DETAILS}
 `
 
 export const CREATE_BOOK = gql`
@@ -67,24 +74,31 @@ export const CREATE_BOOK = gql`
   ${BOOK_DETAILS}
 `
 
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`
+
 export const CREATE_USER = gql`
   mutation createUser ($username: String!, $password: String!, $favoriteGenre: String!){
     createUser (username: $username, password: $password, favoriteGenre: $favoriteGenre) {
-      username
-      favoriteGenre
-      id
+      ...UserDetails
     }
   }
+  ${USER_DETAILS}
 `
 
 export const EDIT_USER = gql`
   mutation editUser ($username: String!, $favoriteGenre: String!){
     editUser (username: $username, favoriteGenre: $favoriteGenre) {
-      username
-      favoriteGenre
-      id
+      ...UserDetails
     }
   }
+  ${USER_DETAILS}
 `
 
 export const LOGIN = gql`

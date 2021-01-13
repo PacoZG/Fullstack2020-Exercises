@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { CREATE_USER, ALL_USERS } from '../queries'
 
 const CreateUserForm = (props) => {
-  const { setNotification } = props
+  const { setNotification, setPage } = props
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [favoriteGenre, setGenre] = useState('')
@@ -20,6 +20,7 @@ const CreateUserForm = (props) => {
     createUser({ variables: { username, password, favoriteGenre } })
     //console.log('creating user:  { username : ', username, ', password: ', password,', favoriteGenre: ', favoriteGenre)
     setNotification(`${username} added`, 5)
+    setPage('login')
     setUsername('')
     setPassword('')
     setGenre('')

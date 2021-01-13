@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 
 const NewBook = (props) => {
-  const { setNotification } = props
+  const { setNotification, updateCacheWith, setPage } = props
   const [title, setTitle] = useState('')
   const [published, setPublished] = useState('')
   const [author, setAuthor] = useState('')
@@ -11,22 +11,28 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
-      setNotification(error.graphQLErrors[0].message, 5)
-    }
+      //console.log('ERROR: ',error)
+      setNotification(error.message, 5)
+    },
+    update: (store, response) => {
+      //console.log(response.data.addBook)
+      updateCacheWith(response.data.addBook)
+    },
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }]
   })
 
   const submit = async (event) => {
     event.preventDefault()
     createBook({ variables: { title, published, author, genres } })
-    console.log('adding book... { title: ', title, ', published: ', published, ', author: ', author, ', genres: ', genres)
+    //console.log('adding book... { title: ', title, ', published: ', published, ', author: ', author, ', genres: ', genres)
     setNotification(`${title} added`, 5)
     setTitle('')
     setPublished('')
     setAuthor('')
     setGenres([])
     setGenre('')
+    setPage('books')
   }
 
   const addGenre = () => {

@@ -8,8 +8,8 @@ import Notification from './components/Notification'
 import CreateUserForm from './components/CreateUserForm'
 import ProfileForm from './components/ProfileForm'
 
-import { useQuery, useApolloClient } from '@apollo/client'
-import { ALL_AUTHORS, ALL_BOOKS, ALL_USERS } from './queries'
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client'
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -24,9 +24,38 @@ const App = () => {
     }
   }, [token])
 
-  const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
-  const users = useQuery(ALL_USERS)
+
+  const updateCacheWith = (addedBook) => {
+    console.log('ADDED BOOK: ', addedBook)
+    const includedIn = (set, object) =>  {
+      set.map(book => book.id).includes(object.id)
+    }
+
+    const booksInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(booksInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: booksInStore.allBooks.concat(addedBook) }
+      })
+    }
+    const authorsInStore = client.readQuery({ query: ALL_AUTHORS })
+    if (!includedIn(authorsInStore.allAuthors, addedBook.author)) {
+      client.writeQuery({
+        query: ALL_AUTHORS,
+        data: { allAuthors: authorsInStore.allAuthors.concat(addedBook.author) }
+      })
+    }
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      window.alert(`${addedBook.title} added`)
+      setNotification(`${addedBook.title} added`, 5)
+      updateCacheWith(addedBook)
+    }
+  })
 
   const logout = () => {
     setNotification(`login out...`, 3)
@@ -43,13 +72,13 @@ const App = () => {
     }, time * 1000)
   }
 
-  if (authors.loading || books.loading || users.loading) {
+  if (books.loading) {
     return <div>{'loading...'}</div>
   }
 
-  //console.log(authors.data)
+  //console.log(authors.data.allAuthors)
   //console.log('BOOKS: ',books.data.allBooks)
-  console.log(users.data.allUsers)
+  //console.log(users.data.allUsers)
 
   return (
     <div>
@@ -69,17 +98,17 @@ const App = () => {
           <button onClick={() => setPage('login')}>{'login'}</button>
           <button onClick={() => setPage('create')}>{'create user'}</button>
         </div>}
-      <Authors show={page === 'authors'} authors={authors.data.allAuthors} />
+      <Authors show={page === 'authors'} updateCacheWith={updateCacheWith} setNotification={setNotification} />
       <Books show={page === 'books'} />
       {token ?
         <div>
-          <NewBook show={page === 'add'} setNotification={setNotification} />
-          <ProfileForm show={page === 'profile'}/>
+          <NewBook show={page === 'add'} setNotification={setNotification}
+            updateCacheWith={updateCacheWith} setPage={setPage} />
+          <ProfileForm show={page === 'profile'} />
         </div> :
         <div>
-          <LoginForm show={page === 'login'} users={users.data.allUsers}
-            setNotification={setNotification} setToken={setToken} setPage={setPage} />
-          <CreateUserForm show={page === 'create'} setNotification={setNotification} />
+          <LoginForm show={page === 'login'} setNotification={setNotification} setToken={setToken} setPage={setPage} />
+          <CreateUserForm show={page === 'create'} setNotification={setNotification} setPage={setPage} />
         </div>
 
       }

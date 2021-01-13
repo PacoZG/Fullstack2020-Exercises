@@ -3,6 +3,7 @@ import { useQuery, useLazyQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
+  //const { updatedBooks } = props
   const loggedinUser = JSON.parse(localStorage.getItem('current-library-user'))// eslint-disable-next-line
   let favoriteGenre
   if (loggedinUser){
@@ -24,12 +25,12 @@ const Books = (props) => {
     } else setBooks(updatedBooks.data.allBooks)// eslint-disable-next-line
   }, [result.data] )
 
-  if (!props.show) {
-    return null
-  }
-
   if (books.loading) {
     return <div>{'loading...'}</div>
+  }
+
+  if (!props.show) {
+    return null
   }
 
   return (
