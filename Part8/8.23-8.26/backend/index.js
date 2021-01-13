@@ -46,6 +46,7 @@ const typeDefs = gql`
     name: String!
     born: Int
     bookCount: Int!
+    booksWritten: [Book!]!
     id: ID!
   }
 
@@ -78,12 +79,15 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allAuthors: async () => {
-      const authors = await Author.find({})
+      const authors = await Author.find({}).populate('books')
+      //console.log(authors)
       return authors
     },
     allBooks: async (root, args) => {
       if (!args.author && !args.genre) {
-        return await Book.find({}).populate('author')
+        const books = await Book.find({}).populate('author')
+        //console.log(books)
+        return books
       }
       if (args.author && !args.genre) {
         const author = await Author.findOne({ name: args.author })
@@ -108,6 +112,12 @@ const resolvers = {
     bookCount: async (root) => {
       const bookCount = await Book.find({ author: { $in: root.id } })
       return bookCount.length
+    },
+    booksWritten: async (root) => {
+      const booksWritten = await Book.find({
+        author: { $in: [root._id] }
+      })
+      return booksWritten
     }
   },
   Book: {
@@ -127,7 +137,7 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author, born: null, bookCount: 1 })
-        console.log('AUTHOR: ', author)
+        //console.log('AUTHOR: ', author)
         try {
           await author.save()
         }
@@ -148,9 +158,9 @@ const resolvers = {
         })
       }
 
-      pubsub.publish('BOOK_ADDED', { bookAdded: book })
-
-      return book
+      pubsub.publish('BOOK_ADDED', { bookAdded: book.populate('author').execPopulate() })
+      //console.log(book)
+      return book.populate('author').execPopulate()
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
