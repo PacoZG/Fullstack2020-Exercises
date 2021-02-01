@@ -3,6 +3,7 @@ import { Entry } from "../types";
 import HospitalForm from './TypeForms/HospitalForm';
 import OccupationalHealthcareForm from './TypeForms/OccupationalForm';
 import HealthCheckForm from './TypeForms/HealthCheckForm';
+import { Dropdown } from 'semantic-ui-react'
 
 export type EntryFormValues = Omit<Entry, 'id'>;
 
@@ -11,19 +12,30 @@ interface Props {
   onCancel: () => void;
 }
 
-const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [form, setForm] = React.useState('hospital')
+const options = [
+  { value: 'hospital', text: 'Hospital' },
+  { value: 'occupational', text: 'Occupational Healthcare' },
+  { value: 'healthcheck', text: 'Health Check' }
+]
+
+const AddEntryForm: React.FC<Props>  = ({ onSubmit, onCancel }) => {
+  const [selection, setSelection] = React.useState('Choose a type of entry');
+  const state = { value: '' }
+  const handleChange = (_event: any, { value }: any) => { setSelection(value) }
+  const { value } = state
 
   return (
     <div>
-      <select onChange={e => setForm(e.target.value)} value={form}>
-        <option value="hospital">{'Hospital'}</option>
-        <option value="occupational">{'Occupational Healthcare'}</option>
-        <option value="healthcheck">{' Health Check'}</option>
-      </select>
-      {form === 'hospital' && <HospitalForm onSubmit={onSubmit} onCancel={onCancel} />}
-      {form === 'occupational' && <OccupationalHealthcareForm onSubmit={onSubmit} onCancel={onCancel} />}
-      {form === 'healthcheck' && <HealthCheckForm onSubmit={onSubmit} onCancel={onCancel} />}
+      <Dropdown
+        onChange={handleChange}
+        options={options}
+        placeholder={selection}
+        selection
+        value={value}
+      />
+      {selection === 'hospital' && <HospitalForm onSubmit={onSubmit} onCancel={onCancel} />}
+      {selection === 'occupational' && <OccupationalHealthcareForm onSubmit={onSubmit} onCancel={onCancel} />}
+      {selection === 'healthcheck' && <HealthCheckForm onSubmit={onSubmit} onCancel={onCancel} />}
     </div>
   );
 };
