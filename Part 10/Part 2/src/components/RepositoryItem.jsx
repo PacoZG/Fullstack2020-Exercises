@@ -63,7 +63,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   flexItemC: {
+    display: 'flex',
     flexGrow: 0,
+    borderRadius: 3,
     backgroundColor: '#0366d6',
     color: 'white',
   },
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   wrapper: {
+    flexDirection: 'row',
     flexWrap: 'wrap',
     flexBasis: 'auto',
   }
