@@ -12,7 +12,7 @@ const RepositoryItem = ({ item }) => {
         />
         <View style={styles.flexItemB}>
           <Text style={styles.text1}>{item.fullName}</Text>
-          <Text style={{ marginRight: 20 }}>{item.description}</Text>
+          <Text >{item.description}</Text>
           <Text style={styles.flexItemC}>{item.language}</Text>
         </View>
       </View>
@@ -56,11 +56,15 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   flexItemB: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexBasis: 'auto',
     flexGrow: 0,
     flexDirection: 'column',
   },
   flexItemC: {
     flexGrow: 0,
+    flexWrap: 'wrap',
     backgroundColor: '#0366d6',
     color: 'white',
   },
