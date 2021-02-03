@@ -13,7 +13,9 @@ const RepositoryItem = ({ item }) => {
         <View style={styles.flexItemB}>
           <Text style={styles.text1}>{item.fullName}</Text>
           <Text >{item.description}</Text>
-          <Text style={styles.flexItemC}>{item.language}</Text>
+          <View styly={styles.wrapper}>
+            <Text style={styles.flexItemC}>{item.language}</Text>
+          </View>
         </View>
       </View>
       <View style={styles.flexItemD}>
@@ -25,8 +27,8 @@ const RepositoryItem = ({ item }) => {
         </View>
         <View style={styles.detailsStyle}>
           <Text style={styles.text2}>
-            {(item.forksCount  / 1000).toFixed(1)}{'k'}
-            </Text>
+            {(item.forksCount / 1000).toFixed(1)}{'k'}
+          </Text>
           <Text>{'Forks'}</Text>
         </View>
         <View style={styles.detailsStyle}>
@@ -57,14 +59,11 @@ const styles = StyleSheet.create({
   },
   flexItemB: {
     display: 'flex',
-    flexWrap: 'wrap',
-    flexBasis: 'auto',
     flexGrow: 0,
     flexDirection: 'column',
   },
   flexItemC: {
     flexGrow: 0,
-    flexWrap: 'wrap',
     backgroundColor: '#0366d6',
     color: 'white',
   },
@@ -95,6 +94,10 @@ const styles = StyleSheet.create({
   },
   detailsStyle: {
     justifyContent: 'center',
+  },
+  wrapper: {
+    flexWrap: 'wrap',
+    flexBasis: 'auto',
   }
 });
 
