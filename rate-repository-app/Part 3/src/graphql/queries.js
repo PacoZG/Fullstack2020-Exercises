@@ -25,16 +25,7 @@ ${REPOSITORY_DETAILS}
 export const SINGLE_REPOSITORY = gql`
   query repositoryDetail($id: ID!) {
     repository(id: $id) {
-      id
-      fullName
-      description
-      language
-      forksCount
-      stargazersCount
-      ratingAverage
-      reviewCount
-      ownerAvatarUrl
-      url
+      ...NodeDetails
       reviews {
         edges {
           node {
@@ -50,7 +41,8 @@ export const SINGLE_REPOSITORY = gql`
         }
       }    
     }
-  }  
+  }
+  ${REPOSITORY_DETAILS}
   `;
 
 export const AUTHORIZED_USER = gql`
