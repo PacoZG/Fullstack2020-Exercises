@@ -3,7 +3,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import Text from './Text';
 
 const styles = StyleSheet.create({
-  flexContainer: {
+  flexContainerRow1: {
     display: 'flex',
     flexDirection: 'row',
     padding: 8,
@@ -30,34 +30,39 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 20,
   },
-  text: {
+  name: {
     flexGrow: 0,
     display: 'flex',
     fontWeight: 'bold',
+    marginBottom: 7,
+  },
+  description: {
+    marginBottom: 7,
+    paddingRight: 60,
   },
   wrapper: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     flexBasis: 'auto',
+    marginBottom: 7,
   }
 });
 
 const Information = ({ item }) => {
-  return(
-    <View style={styles.flexContainer}>
-        <Image
-          style={styles.logo}
-          source={{ uri: item.ownerAvatarUrl }}
-        />
-        <View style={styles.flexItem}>
-          <Text style={styles.text}>{item.fullName}</Text>
-          <Text >{item.description}</Text>
-          <View style={styles.wrapper}>
-            <Text style={styles.flexLanguage}>{item.language}</Text>
-          </View>
+  return (
+    <View style={styles.flexContainerRow1}>
+      <Image
+        style={styles.logo}
+        source={{ uri: item.ownerAvatarUrl }}
+      />
+      <View style={styles.flexItem}>
+        <Text testID="fullName" style={styles.name}>{item.fullName}</Text>
+        <Text testID="description" style={styles.description}>{item.description}</Text>
+        <View style={styles.wrapper}>
+          <Text testID="language" style={styles.flexLanguage}>{item.language}</Text>
         </View>
       </View>
-
+    </View>
   );
 };
 

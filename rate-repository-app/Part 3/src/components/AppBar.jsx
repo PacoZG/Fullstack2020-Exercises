@@ -32,13 +32,15 @@ const AppBar = () => {
     authorizedUser = data.authorizedUser;
   }
   const signOut = useSignOut();
-  console.log('AUTHORIZED_USER: ', authorizedUser);
+  //console.log('AUTHORIZED_USER: ', authorizedUser);
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} horizontal >
         <AppBarTab link='/' label='Repositories' />
         {!authorizedUser && <AppBarTab link='/signIn' label='Sign in' />}
+        {!authorizedUser && <AppBarTab link='/signUp' label='Sign up' />}
+        {authorizedUser && <AppBarTab link='/createReview' label='Create a review' />}
         {authorizedUser && <AppBarTab label='Sign out' onPress={() => signOut()} />}
       </ScrollView>
     </View>
