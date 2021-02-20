@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { FlatList, View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import RepositoryItem from "../RepositoryItem";
 import useRepositories from "../../hooks/useRepositories";
 import { useHistory } from "react-router-native";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   }
 });
 
-//const ItemSeparator = () => <View style={styles.separator} />;
+const ItemSeparator = () => <View style={styles.separator} />;
 
 const orderOptions = [
   { label: 'Latest repositories', value: 'latest' },
@@ -27,14 +27,21 @@ const orderOptions = [
   { label: 'Lowest rated repositories', value: 'lowest' },
 ];
 
-export const RepositoryListContainer = ({ repositories, setValue, setSearchQuery, searchQuery, selectedValue }) => {
+export const RepositoryListContainer = ({
+  repositories,
+  setValue,
+  setSearchQuery,
+  searchQuery,
+  selectedValue,
+  onEndReach,
+}) => {
   const history = useHistory();
   const repositoryNodes = repositories.edges
     ? repositories.edges.map((edge) => edge.node)
     : [];
 
   return (
-    <View style={styles.container} >
+    <SafeAreaView style={styles.container} >
       <FlatList
         ListHeaderComponent={
           <Header
@@ -45,16 +52,18 @@ export const RepositoryListContainer = ({ repositories, setValue, setSearchQuery
             selectedValue={selectedValue}
           />
         }
+        ListFooterComponent={ItemSeparator}
         data={repositoryNodes}
-        //ItemSeparatorComponent={ItemSeparator}
         keyExtractor={item => item.id}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => history.push(`repositories/${item.id}`)} >
             <RepositoryItem key={item.id} item={item} showButton={false} />
           </TouchableOpacity>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -75,20 +84,21 @@ const RepositoryList = () => {
   const [variables, setVariables] = useState(getVariables());
   const [selectedValue, setSelectedValue] = useState('');
   const setValue = (value) => {
-    //console.log('VALUE: ', value);
     setVariables(getVariables(value));
     setSelectedValue(value);
-    //console.log('VARIABLES: ', getVariables(value));
   };
 
   const [searchQuery, setSearchQuery] = useState('');
-  //console.log('QUERY: ', searchQuery)
   const [value] = useDebounce(searchQuery, 500);
-  //console.log('QUERY_AFTER_1000: ', value)
 
-  const { repositories } = useRepositories({ ...variables, searchKeyword: value });
+  const { repositories, fetchMore } = useRepositories({ ...variables, searchKeyword: value, first: 8 });
 
   //console.log('REPOSITORIES: ', repositories)
+
+  const onEndReach = () => {
+    //console.log('You have reached the end of the list');
+    fetchMore();
+  };
 
   return <RepositoryListContainer
     repositories={repositories}
@@ -96,6 +106,7 @@ const RepositoryList = () => {
     setSearchQuery={setSearchQuery}
     searchQuery={searchQuery}
     selectedValue={selectedValue}
+    onEndReach={onEndReach}
   />;
 };
 

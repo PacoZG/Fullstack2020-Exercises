@@ -23,33 +23,67 @@ ${REPOSITORY_DETAILS}
 
 
 export const SINGLE_REPOSITORY = gql`
-  query repositoryDetail($id: ID!) {
+  query repositoryDetail($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       ...NodeDetails
-      reviews {
+      reviews (first: $first, after: $after) {
         edges {
           node {
             id
             text
             rating
             createdAt
+            repositoryId
             user {
-              id
               username
             }
           }
+          cursor
         }
-      }    
+        pageInfo {
+          endCursor
+          startCursor
+          totalCount
+          hasNextPage
+        }
+      }  
     }
   }
   ${REPOSITORY_DETAILS}
   `;
 
-export const AUTHORIZED_USER = gql`
-    query {
-      authorizedUser {
-        id
-        username
+  export const AUTHORIZED_USER = gql`
+  query authorizedUser($first: Int, $includeReviews: Boolean = false) {
+    authorizedUser {
+      id
+      username
+      reviews (first: $first) @include(if: $includeReviews) {
+        edges {
+          node {
+            id
+            userId
+            repositoryId
+            rating
+            createdAt
+            text
+            repository{
+              ownerName
+              name
+              url
+            }
+            user{
+              username
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          totalCount
+          hasNextPage
+          startCursor
+          endCursor
+        }
       }
     }
-  `;
+  }
+`;

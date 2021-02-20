@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 
 const placeholder = {
   label: 'Select an item...',
-  value: null,
+  value: '',
   color: '#909090'
 }
 

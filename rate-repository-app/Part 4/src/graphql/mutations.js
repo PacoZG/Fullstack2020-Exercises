@@ -21,10 +21,16 @@ export const SIGN_UP = gql`
 `;
 
 export const CREATE_REVIEW = gql`
-mutation createReview($inputs: CreateReviewInput){
-  createReview(review: $inputs){
-    id
-    repositoryId
+  mutation createReview($inputs: CreateReviewInput){
+    createReview(review: $inputs){
+      id
+      repositoryId
+    }
   }
-}
+`;
+
+export const DELETE_REVIEW = gql`
+  mutation deleteReview($id: ID!){
+    deleteReview (id: $id)
+  }
 `;

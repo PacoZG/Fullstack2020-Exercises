@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   scrollView: {
-    marginHorizontal: 0,
+    marginHorizontal: 5,
   },
   text: {
     color: 'white',
@@ -41,6 +41,7 @@ const AppBar = () => {
         {!authorizedUser && <AppBarTab link='/signIn' label='Sign in' />}
         {!authorizedUser && <AppBarTab link='/signUp' label='Sign up' />}
         {authorizedUser && <AppBarTab link='/createReview' label='Create a review' />}
+        {authorizedUser && <AppBarTab link='/myReviews' label='My reviews' />}
         {authorizedUser && <AppBarTab label='Sign out' onPress={() => signOut()} />}
       </ScrollView>
     </View>
