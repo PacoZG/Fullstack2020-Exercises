@@ -53,11 +53,11 @@ export const SINGLE_REPOSITORY = gql`
   `;
 
   export const AUTHORIZED_USER = gql`
-  query authorizedUser($first: Int, $includeReviews: Boolean = false) {
+  query authorizedUser($first: Int, $after: String, $includeReviews: Boolean = false) {
     authorizedUser {
       id
       username
-      reviews (first: $first) @include(if: $includeReviews) {
+      reviews (first: $first, after: $after) @include(if: $includeReviews) {
         edges {
           node {
             id

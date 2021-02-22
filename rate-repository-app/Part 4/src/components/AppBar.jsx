@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#24292e',
     paddingBottom: 15,
-    paddingTop: 40,
+    marginTop: 40,
   },
   scrollView: {
     marginHorizontal: 5,

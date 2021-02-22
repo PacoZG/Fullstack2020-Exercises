@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import FormikTextInput from './FormikTextInput';
-import { View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { View, TouchableWithoutFeedback, StyleSheet, Alert } from 'react-native';
 import Text from './Text';
 import useCreateReview from '../hooks/useCreateReview';
 
@@ -87,7 +87,16 @@ const CreateReview = () => {
     try {
       await createReview({ ownerName, repositoryName, rating, text });
     } catch (e) {
-      console.log(e);
+      console.log('Error: ',e.message);
+      const message = e.message.slice(15, e.message.length);
+      Alert.alert (
+        'GraphQL error',
+        `${message}`,
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      )
     }
   };
 

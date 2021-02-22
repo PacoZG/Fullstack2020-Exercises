@@ -6,6 +6,7 @@ import ReviewItem from '../components/ReviewItem';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e1e4e8',
+    marginBottom: 80,
   },
   flexContainerInfo: {
     display: 'flex',
@@ -21,11 +22,13 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const UserReviews = () => {
 
-  const { reviews, loading, fetchMore, refetch } = useUserReviews({ includeReviews: true });
+  const { reviews, loading, fetchMore, refetch } = useUserReviews({ first: 2, includeReviews: true });
 
   const onEndReach = () => {
-    console.log('You have reached the end of the list');
+    console.log('You have reached the end of the list, before fetchmore');
     fetchMore();
+    console.log('FETCH_MORE: ',reviews);
+    console.log('You have reached the end of the list, after fetchmore');
   };
 
   return (

@@ -18,7 +18,7 @@ const useUserReviews = (variables) => {
     fetchMore({
       query: AUTHORIZED_USER,
       variables: {
-        after: data.authorizedUser.reviews.pageInfo.hasNextPage,
+        after: data.authorizedUser.reviews.pageInfo.endCursor,
         ...variables
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -39,7 +39,7 @@ const useUserReviews = (variables) => {
     });
   };
 
-  console.log('DATA_USER:', data ? data.authorizedUser : []);
+  //console.log('DATA_USER:', data ? data.authorizedUser : []);
 
   return {
     reviews: data ? data.authorizedUser.reviews.edges : [],

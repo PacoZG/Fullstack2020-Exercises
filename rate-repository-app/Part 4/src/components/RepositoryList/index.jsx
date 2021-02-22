@@ -9,6 +9,7 @@ import { useDebounce } from 'use-debounce';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e1e4e8',
+    marginBottom: 70,
   },
   separator: {
     height: 15,
