@@ -3,7 +3,7 @@ import { Entry } from "../types";
 import HospitalForm from './TypeForms/HospitalForm';
 import OccupationalHealthcareForm from './TypeForms/OccupationalForm';
 import HealthCheckForm from './TypeForms/HealthCheckForm';
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown } from 'semantic-ui-react';
 
 export type EntryFormValues = Omit<Entry, 'id'>;
 
@@ -16,13 +16,13 @@ const options = [
   { value: 'hospital', text: 'Hospital' },
   { value: 'occupational', text: 'Occupational Healthcare' },
   { value: 'healthcheck', text: 'Health Check' }
-]
+];
 
-const AddEntryForm: React.FC<Props>  = ({ onSubmit, onCancel }) => {
+const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [selection, setSelection] = React.useState('Choose a type of entry');
-  const state = { value: '' }
-  const handleChange = (_event: any, { value }: any) => { setSelection(value) }
-  const { value } = state
+  const state = { value: '' };
+  const handleChange = (_event: any, { value }: any) => { setSelection(value); };
+  const { value } = state;
 
   return (
     <div>

@@ -24,7 +24,7 @@ const PatientListPage: React.FC = () => {
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
-    console.log('VALUES: ', values)
+    console.log('VALUES: ', values);
     try {
       const { data: newPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients`,

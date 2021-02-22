@@ -14,7 +14,7 @@ interface Props {
 }
 
 const HealthCheckForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [{ diagnoses }] = useStateValue()
+  const [{ diagnoses }] = useStateValue();
 
   return (
     <Formik

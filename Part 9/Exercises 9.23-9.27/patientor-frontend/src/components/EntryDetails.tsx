@@ -72,7 +72,7 @@ const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
       return <HealthCheckEntryDetails entry={entry} />;
     default:
       return assertNever(entry);
-  };
+  }
 };
 
 export default EntryDetails;

@@ -6,18 +6,18 @@ import { Icon, Header, Button } from "semantic-ui-react";
 import { useStateValue, loadPatient, updatePatient } from "../state";
 import { Patient, Entry } from '../types';
 import EntryDetails from '../components/EntryDetails';
-import { EntryFormValues } from '../AddEntryModal/AddEntryForm'
-import AddEntryModal from '../AddEntryModal'
+import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
+import AddEntryModal from '../AddEntryModal';
 
 const setGenderIcon = (gender: any | undefined) => {
   switch (gender) {
     case "female":
-      return "venus"
+      return "venus";
     case "male":
-      return "mars"
+      return "mars";
     case "other":
-      return "genderless"
-  };
+      return "genderless";
+  }
 };
 
 const PatientDetails: React.FC = () => {
@@ -29,7 +29,7 @@ const PatientDetails: React.FC = () => {
 
   const openModal = (): void => {
     setModalOpen(true);
-  }
+  };
 
   const closeModal = (): void => {
     setModalOpen(false);
@@ -37,7 +37,7 @@ const PatientDetails: React.FC = () => {
   };
 
   const submitNewEntry = async (values: EntryFormValues) => {
-    console.log('VALUES: ', values)
+    console.log('VALUES: ', values);
     try {
       const { data: newEntry } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
@@ -59,18 +59,18 @@ const PatientDetails: React.FC = () => {
             `${apiBaseUrl}/patients/${id}`
           );
           dispatch(loadPatient(patientFromApi));
-          //console.log('patient fetch: ', patient)
+          //console.log('patient fetch: ', patient);
         } catch (error) {
-          console.log(error)
-        };
+          console.log(error);
+        }
       };
       fetchPatient();
-    };
+    }
   }, [patient, id, dispatch]);
 
   if (!patient) {
     return null;
-  };
+  }
 
   return (
     <div className="App">

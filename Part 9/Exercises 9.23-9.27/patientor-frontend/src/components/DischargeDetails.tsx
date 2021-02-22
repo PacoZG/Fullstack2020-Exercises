@@ -4,7 +4,7 @@ import { Discharge } from '../types';
 
 
 const DischargeDetails: React.FC<{ discharge: Discharge }> = ({ discharge }) => {
-  console.log('DISCHARGE: ',discharge)
+  console.log('DISCHARGE: ',discharge);
   return (
     <Container>
       <Header as='h3' color='blue'>{'Discharghed'}</Header>

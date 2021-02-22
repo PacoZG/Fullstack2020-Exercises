@@ -15,7 +15,7 @@ interface Props {
 }
 
 const OccupationalHealthcareForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [{ diagnoses }] = useStateValue()
+  const [{ diagnoses }] = useStateValue();
 
   return (
     <Formik
